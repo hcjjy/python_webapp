@@ -18,10 +18,10 @@ def create_pool(loop,**kw):
 	port = kw.get('port','3306'),
 	user = kw['user'],
 	password = kw['password'],
-	db = kw['db']
-	charset = kw.get('charset','utf-8')
-	autocommit = kw.get('charset',True)
-	maxsize = kw.get('maxsize',10)
+	db = kw['db'],
+	charset = kw.get('charset','utf-8'),
+	autocommit = kw.get('charset',True),
+	maxsize = kw.get('maxsize',10),
 	minsize = kw.get('minisize',1),
 	loop = loop
 	)
@@ -36,7 +36,7 @@ def select(sql,args,size=None):
 		yield from cur.execute(sql.replace('?','%s'),args or ())
 		if size:
 			rs = yield from cur.fetchmany(size)
-		else
+		else:
 			rs = yield from cur.fetchall()
 		yield from cur.close()
 		logging.info('rows returned: %s' %len(rs))
@@ -47,27 +47,28 @@ def select(sql,args,size=None):
 def execute(sql,args):
 	log(sql)
 	with (yield from __pool) as conn:
-	try:
-		cur = yield from conn.cursor()
-		yield from cur.execute(sql.replace('?','%s'),args)
-		affected = cur.rowcount
-		yield from cur.close()
-	except BaseException as e:
-		raise
-	return affected
+		try:
+			cur = yield from conn.cursor()
+			yield from cur.execute(sql.replace('?','%s'),args)
+			affected = cur.rowcount
+			yield from cur.close()
+		except BaseException as e:
+			raise
+		return affected
 
+#ORM
 #定义User对象
-from import Model, StringField, IntegerField
+# from orm import Model, StringField, IntegerField
 
-class User(Model):
-	__table__ = 'users'
-	id = IntegerField(primary_key = True)
-	name = StringField()
+# class User(Model):
+	# __table__ = 'users'
+	# id = IntegerField(primary_key = True)
+	# name = StringField()
 
-
-
-
-
+a = 10
+b = 20
+c = (a<b and a or b)
+print(c)
 
 
 
