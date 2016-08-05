@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
-'ORMTest.py'
+'DBOperator.py'
 __autor__ ='myth'
 
 import logging;logging.basicConfig(level = logging.INFO)
@@ -56,19 +56,9 @@ def execute(sql,args):
 			raise
 		return affected
 
-#ORM
-#定义User对象
-# from orm import Model, StringField, IntegerField
 
-# class User(Model):
-	# __table__ = 'users'
-	# id = IntegerField(primary_key = True)
-	# name = StringField()
 
-a = 10
-b = 20
-c = (a<b and a or b)
-print(c)
+
 
 
 
