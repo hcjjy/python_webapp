@@ -1,34 +1,53 @@
 #!/usr/bin/env python3
-#http://www.liaoxuefeng.com/article/001432619295115c918a094d8954bd493037b03d27bf9a9000 -*- coding:utf-8 -*-
+#-*- coding:utf-8 -*-
 'ormTest.py'
 __autor__ ='myth'
 
 from orm import *
 import asyncio
 
-# class User(Model):
-	# __table__ = 'User'
-	# id = IntegerField('id',True)
-	# name = StringField('name')
+class User(Model):
+	__table__ = 'User'
+	id = IntegerField('id',True)
+	name = StringField('name')
 
-# user = User(id = 132,name = 'aaa')
 loop = asyncio.get_event_loop()
-kw ={'user':'root','password':'root','db':'JC'}
+kw ={'host':'localhost','port':3306,'user':'root','password':'root','db':'JC'}
 
-loop.run_until_complete(create_pool(loop,**kw))
+#查询测试
+@asyncio.coroutine
+def test_findAll(loop):
+	global __pool
+	yield from create_pool(loop,**kw)
+	#yield from User.findAll('id = 111',[],**{'limit':(1,2)})
+
+	# with(yield from __pool) as conn:
+		# cur = yield from conn.cursor()
+		# yield from cur.execute("select* from User;")#insert into User(id,name) values(1,'hh');")
+		# value = yield from cur.fetchall()
+		# print(value)
+	
+	__pool.close()
+	yield from __pool.wait_closed()
+
+user = User(id = 1,name = 'aaa')
+
+loop.run_until_complete(test_findAll(loop))
+# __pool.close()
+# loop.run_until_complete(__pool.wait_closed())
+# loop.close()
 
 
+#创建表的mysql语句
+# create table User(
+	# id int not null auto_increment primary key,
+	# name varchar(20) not null
+# )engine = InnoDB;
 
-#tasks = [user.insert()]
-#loop = asyncio.get_event_loop()
-#loop.run_until_complete(user.insert())#(aysncio.wait(tasks))
-
-# async def main():
-	# await asyncio.wait([user.insert()])
-
-# loop = asyncio.get_event_loop()
-# loop.run_until_complete(main())
-#loop.run_forever()
-#loop.close()
-
-#python ormTest.py
+# create table Book(
+	# id int not null auto_increment primary key,
+	# name varchar(20) not null,
+	# user_id int not null,
+	# foreign key foreignName(user_id) 
+	# references User(id)
+# )engine = InnoDB;
