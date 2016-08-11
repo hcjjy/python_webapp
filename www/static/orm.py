@@ -333,33 +333,3 @@ class Model(dict, metaclass=ModelMetaclass):
 	# # references User(id)
 # # )engine = InnoDB;
 
-#Q1：
-#Q2：print(rs)输出格式异常
-#Q3: 全局变量调用出错
-#Q4: (@asyncio.coroutine,yield from)和(aysnc,await)使用和异同点
-#Q5: mysql select args的使用,limit的用法
-#Q6: 创建table主键设置了auto_increment，但是实际情况是在插入重复的时候无法自动+1
-#Q7: 无法直接使用import my.py(自定义模块)
-
-#R2: cur = yield from conn.cursor(aiomysql.DictCursor)让返回的格式为由若干个dict元素组成的list类型，
-#cur = yield from conn.cursor()返回的格式为由若干个tuple元素的tuple类型。
-#R3: for example：(虽然config只会导入(执行)一次，但是main.py还是需要写import config,不然调用config.x会无法识别config)
-# config.py:
-# x = 0   # Default value of the 'x' configuration setting
-# print('i'm config.py,just be imported once.')
-
-# mod.py:
-# import config
-# config.x = 1
-# print('import config')
-
-# main.py:
-# import config
-# import mod
-# print(config.x)
-
-#R5: args可以放置limit的值比如5(5代表只选择前5个结果)或者(0,5)(代表从第一个元素开始，选择连续的5个结果)
-#'select * from User limit 0,5;'
-#R6: 理解错误，auto_increment不是在插入重复的时候自动加1，而是可以在插入的时候不写主键，主键自动生成，生成规则如下:
-#max(id)+1开始计数，可以alter table User auto_increment=值，改变开始计数值，但是如果值小于max(id)，设置无效，按max(id)+1计数。
-#R7: 因为导入时python搜索路径没有当前路径，可作如下修改：控制台:1.import sys	2.sys.path.append(当前路径)

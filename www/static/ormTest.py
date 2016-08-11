@@ -104,7 +104,7 @@ loop.close()
 	# references User(id)
 # )engine = InnoDB;
 
-#Q1：
+#Q1：with as的用法
 #Q2：print(rs)输出格式异常
 #Q3: 全局变量调用出错
 #Q4: (@asyncio.coroutine,yield from)和(aysnc,await)使用和异同点
@@ -112,6 +112,7 @@ loop.close()
 #Q6: 创建table主键设置了auto_increment，但是实际情况是在插入重复的时候无法自动+1
 #Q7: 无法直接使用import my.py(自定义模块)
 
+#R1：http://blog.kissdata.com/2014/05/23/python-with.html
 #R2: cur = yield from conn.cursor(aiomysql.DictCursor)让返回的格式为由若干个dict元素组成的list类型，
 #cur = yield from conn.cursor()返回的格式为由若干个tuple元素的tuple类型。
 #R3: for example：(虽然config只会导入(执行)一次，但是main.py还是需要写import config,不然调用config.x会无法识别config)
