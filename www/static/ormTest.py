@@ -3,6 +3,7 @@
 'ormTest.py'
 __autor__ ='myth'
 
+import config
 from orm import *
 import asyncio
 
@@ -17,9 +18,8 @@ kw ={'host':'localhost','port':3306,'user':'root','password':'root','db':'JC'}
 #测试连接池
 @asyncio.coroutine
 def test_pool(loop):
-	global __pool
 	yield from create_pool(loop,**kw)
-	with(yield from __pool) as conn:
+	with(yield from config.__pool) as conn:
 		cur = yield from conn.cursor()
 		yield from cur.execute("insert into User(id,name) values(%s,%s)",[None,'kfc']);#("select* from User;")
 		value = yield from cur.fetchall()
@@ -30,7 +30,6 @@ def test_pool(loop):
 #测试查询
 @asyncio.coroutine
 def test_findAll(loop):
-	global __pool
 	yield from create_pool(loop,**kw)
 	users = yield from User.findAll("name= 'aaa'",**{'limit': (0,5)})
 	print(users)
@@ -39,7 +38,6 @@ def test_findAll(loop):
 
 @asyncio.coroutine
 def test_findNumber(loop):
-	global __pool
 	yield from create_pool(loop,**kw)
 	num = yield from User.findNumber('name',"name = 'aaa'")
 	print(num)
@@ -48,7 +46,6 @@ def test_findNumber(loop):
 
 @asyncio.coroutine
 def test_find(loop):
-	global __pool
 	yield from create_pool(loop,**kw)
 	user = yield from User.find(123)
 	print(user)
@@ -58,7 +55,6 @@ def test_find(loop):
 #测试插入
 @asyncio.coroutine
 def test_insert(loop):
-	global __pool
 	user = User(name = 'aaa')
 	yield from create_pool(loop,**kw)
 	yield from user.insert()
@@ -69,7 +65,6 @@ def test_insert(loop):
 #测试更新
 @asyncio.coroutine
 def test_update(loop):
-	global __pool
 	user = User(id = 111,name = 'fff')
 	print(user)
 	yield from create_pool(loop,**kw)
@@ -81,7 +76,6 @@ def test_update(loop):
 #测试删除
 @asyncio.coroutine
 def test_delete(loop):
-	global __pool
 	user = User(id = 5)
 	yield from create_pool(loop,**kw)
 	yield from user.remove()
@@ -92,8 +86,8 @@ def test_delete(loop):
 
 tasks = [test_pool(loop),test_delete(loop),test_update(loop),test_insert(loop),test_findAll(loop),test_findNumber(loop),test_find(loop)]
 loop.run_until_complete(asyncio.wait(tasks))
-__pool.close()
-loop.run_until_complete(__pool.wait_closed())
+config.__pool.close()
+loop.run_until_complete(config.__pool.wait_closed())
 loop.close()
 
 #创建表的mysql语句
@@ -120,6 +114,21 @@ loop.close()
 
 #R2: cur = yield from conn.cursor(aiomysql.DictCursor)让返回的格式为由若干个dict元素组成的list类型，
 #cur = yield from conn.cursor()返回的格式为由若干个tuple元素的tuple类型。
+#R3: for example：(虽然config只会导入(执行)一次，但是main.py还是需要写import config,不然调用config.x会无法识别config)
+# config.py:
+# x = 0   # Default value of the 'x' configuration setting
+# print('i'm config.py,just be imported once.')
+
+# mod.py:
+# import config
+# config.x = 1
+# print('import config')
+
+# main.py:
+# import config
+# import mod
+# print(config.x)
+#R4: 暂时没有解决
 #R5: args可以放置limit的值比如5(5代表只选择前5个结果)或者(0,5)(代表从第一个元素开始，选择连续的5个结果)
 #'select * from User limit 0,5;'
 #R6: 理解错误，auto_increment不是在插入重复的时候自动加1，而是可以在插入的时候不写主键，主键自动生成，生成规则如下:
