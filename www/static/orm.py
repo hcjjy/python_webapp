@@ -83,11 +83,27 @@ class StringField(Field):
 	def __init__(self,name = None,primary_key = False,default = None, ddl = 'varchar(100)'):
 		super().__init__(name,ddl,primary_key,default) #super(StringField,self)
 
+
+#Field subclass => BooleanField
+class BooleanField(Field):
+	def __init__(self,name=None,default = False):
+		super().__init__(name,'boolean',False,default)
+
 #Field subclass => IntegerField
 class IntegerField(Field):
-	def __init__(self,name = None,primary_key = False,default = None, ddl = 'int'):
+	def __init__(self,name = None, primary_key = False, default = 0, ddl = 'int'):
 		super().__init__(name,ddl,primary_key,default)
 	
+#Field subclass => FloatField
+class FloatField(Field):
+	def __init__(self,name = None, primary_key = False, default = 0.0):
+		super().__init__(name,'real',primary_key,default)
+		
+#Field subclass => TextField
+class TextField(Field):
+	def __init__(self,name = None, default = None):
+		super().__init__(name,'text',False,default)
+
 #metaclass ModelMetaclass
 class ModelMetaclass(type):
 	def __new__(cls,name,bases,attrs):

@@ -8,7 +8,7 @@ from orm import *
 import asyncio
 
 class User(Model):
-	__table__ = 'User'
+	__table__ = 'users'
 	id = IntegerField('id',True)
 	name = StringField('name')
 
