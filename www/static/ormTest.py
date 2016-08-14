@@ -8,7 +8,7 @@ from orm import *
 import asyncio
 
 class User(Model):
-	__table__ = 'users'
+	__table__ = 'user'
 	id = IntegerField('id',True)
 	name = StringField('name')
 
@@ -66,7 +66,6 @@ def test_insert(loop):
 @asyncio.coroutine
 def test_update(loop):
 	user = User(id = 111,name = 'fff')
-	print(user)
 	yield from create_pool(loop,**kw)
 	yield from user.update()
 	print('update')

@@ -167,7 +167,7 @@ class Model(dict, metaclass=ModelMetaclass):
 			field = self.__mappings__[key]
 			if field.default is not None:
 				value = field.default() if callable(field.default) else field.default
-				loggin.debug('using default value for %s: %s' %(key,str(value)))
+				logging.debug('using default value for %s: %s' %(key,str(value)))
 				setattr(self,key,value)
 		return value
 	
