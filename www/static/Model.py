@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #-*- coding:utf-8 -*-
-'Model.py'
+'model.py'
 __autor__ ='myth'
 
 import time,uuid
@@ -18,7 +18,7 @@ class User(Model):
 	admin = BooleanField()
 	name = StringField(ddl = 'varchar(50)')
 	image = StringField(ddl = 'varchar(50)')
-	create_at = FloatField(default = time.time)
+	created_at = FloatField(default = time.time)
 	
 class Blog(Model):
 	__table__ = 'blogs'
@@ -30,7 +30,7 @@ class Blog(Model):
 	name = StringField(ddl = 'varchar(50')
 	summary = StringField(ddl = 'varchar(200)')
 	content = TextField()
-	create_at = FloatField(default = time.time)
+	created_at = FloatField(default = time.time)
 
 class Comment(Model):
 	__table__ = 'comments'
@@ -41,7 +41,7 @@ class Comment(Model):
 	user_name = StringField(ddl = 'varchar(20)')
 	user_image = StringField(ddl = 'varchar(20)')
 	content = TextField()
-	create_at = FloatField(default = time.time)
+	created_at = FloatField(default = time.time)
 
 	
 	

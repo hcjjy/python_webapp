@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #-*- coding:utf-8 -*-
-'ormTest.py'
+'test_orm.py'
 __autor__ ='myth'
 
 import config
